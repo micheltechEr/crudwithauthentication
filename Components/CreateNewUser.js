@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native'
 import style from './styles'
 import { validate } from 'validate.js';
 import constraints from './constraingt';
+import DatePicker from 'react-native-datepicker';
 
 export default function CreateNewUser(){
     const  navigation = useNavigation()
@@ -29,7 +30,7 @@ export default function CreateNewUser(){
                     .auth()
                     .createUserWithEmailAndPassword(state.email, state.password)
                     .then((cred) => {
-                        return firebase.db.collection("clients").doc(cred.user.uid).set({
+                        return  firebase.db.collection("clients").doc(cred.user.uid).set({
                             name: state.name,
                             phone: state.phone,
                         });

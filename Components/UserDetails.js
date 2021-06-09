@@ -37,9 +37,14 @@ const updateUser = async () => {
 
 const deleteUser = async () => {
     try {
-        const delRef = firebase.db.collection("clients").doc(route.params?.id);
-        await delRef.delete();
+        const client = firebase.firebase.auth().currentUser
+        client.delete().then(function(){
+                    
+        const removeLink = firebase.db.collection("clients").doc(route.params?.id);
+         removeLink.delete();
         alert("Removed");
+        navigation.goBack()
+        })
     } catch (e) {
         alert("Removal error,try again");
     }
