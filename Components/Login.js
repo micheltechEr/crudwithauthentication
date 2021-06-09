@@ -12,12 +12,12 @@ import constraints from './constraingt';
 
 export default function Home(){
     const  navigation = useNavigation()
-    const[visible,setVisible] = useState(false)
     const [state,setState] = useState({
         id:'',
         name:'',
         email :'',
         password:'',
+        visible:false,
     })
     const handleChangeText =(name,value) =>{
         setState({...state,[name]:value})
@@ -51,10 +51,10 @@ export default function Home(){
          <View style={style.loginBackground}>
              <Text style={style.titleHome}>YARD SHOP </Text>
 
-             <TouchableOpacity onPress={()=>setVisible(true)}>
+             <TouchableOpacity onPress={()=>setState(true)}>
                  <Text style={style.startButton}>START</Text>
              </TouchableOpacity>                 
-             <Modal animationType={'slide'} transparent={true} visible={visible} >
+             <Modal animationType={'slide'} transparent={true}  visible={state.visible} >
 
              <View  style={style.loginModal}>
                  <TextInput placeholder={'Email'} style={style.inputModal} autoCompleteType={'email'}  onChangeText ={ (value)=> handleChangeText('email',value)} ></TextInput>
