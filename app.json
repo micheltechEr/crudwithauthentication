@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "autoclean",
-    "slug": "autoclean",
+    "name": "yardshop",
+    "slug": "yardshop",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

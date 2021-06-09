@@ -35,9 +35,15 @@ const updateUser = async () => {
     }
 };
 
-
-
-
+const deleteUser = async () => {
+    try {
+        const delRef = firebase.db.collection("clients").doc(route.params?.id);
+        await delRef.delete();
+        alert("Removed");
+    } catch (e) {
+        alert("Removal error,try again");
+    }
+};
 
  const handleChangeText =(name,value) =>{
      seClient({...client,[name]:value})
@@ -49,8 +55,6 @@ const updateUser = async () => {
          )
      }
  }  
-
-
 
 return(
     <View>
