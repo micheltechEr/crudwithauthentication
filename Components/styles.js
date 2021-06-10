@@ -12,7 +12,7 @@ const style = StyleSheet.create({
        borderTopColor:'transparent',
        borderStyle:'solid',
        borderWidth:0.35,
-       marginBottom:30,
+       marginBottom:20,
        width:210,
 },
 buttonSave:{
@@ -105,10 +105,10 @@ closeModal:{
     fontSize:20,
     textAlign:'center'
 },
-
-
-
-
+datePicker:{
+    marginTop:15,
+    marginBottom: 25
+},
 
 })
 export default style

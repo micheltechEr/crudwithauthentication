@@ -10,24 +10,33 @@ export default function UserDetails({route}){
     const initialState = {
         id:'',
         name:'',
-        phone:''
+        phone:'',
+        email:'',
+        password:''
     }
 
     const[client,seClient] = useState(initialState)
     const [loading,setLoading] = useState(true) //Defina se o indicador de carregamento é mostrado.
 
 const updateUser = async () => {
-    if (client.name === "" || client.phone === "") {
+    if (client.name === "" || client.email === '' || client.password === '' || client.phone === "") {
         alert("Please, provide a value");
     } else {
         try {
-            const upRef = firebase.db.collection("clients").doc(route.params?.id);
-            await upRef.set({
-                name: client.name,
-                phone: client.phone,
-            });
-            seClient(initialState);
-            alert("Updated successfully ");
+            const clientT = firebase.firebase.auth().currentUser;
+            const newPass = client.password
+            const newEmail = client.email
+            clientT.updateEmail(newEmail).then(function(){
+                clientT.updatePassword(newPass).then(function(){
+                    const upRef = firebase.db.collection("clients").doc(route.params?.id);
+                     upRef.set({
+                        name: client.name,
+                        phone: client.phone,
+                    });
+                    seClient(initialState);
+                    alert("Updated successfully ");
+                })
+            })
         } catch (e) {
             alert("Update error,try again");
             console.log("Cause of the error ", e);
@@ -66,6 +75,9 @@ return(
         <Text>Welcome {route.params?.name}</Text>
           <TextInput style= {style.input} placeholder={'Name'}  value ={client.name} onChangeText ={(value)=> handleChangeText('name',value)}></TextInput>
           <TextInput style = {style.input} placeholder={'Phone'} value={client.phone} onChangeText={(value)=>handleChangeText('phone',value)}></TextInput>
+          <TextInput style = {style.input} placeholder={'Email'} value={client.email} onChangeText={(value)=>handleChangeText('email',value)}></TextInput>
+          <TextInput style = {style.input} placeholder={'Password'} value={client.password} onChangeText={(value)=>handleChangeText('password',value)}></TextInput>
+
                    <TouchableOpacity onPress={()=>updateUser()}>
                       <Text style ={style.buttonUpd}>UPDATE</Text>
                    </TouchableOpacity>
