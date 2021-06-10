@@ -1,9 +1,9 @@
-import React, { useEffect,useState } from 'react'
-import { ActivityIndicator } from 'react-native'
+import React, {useState } from 'react'
 import {View,Text ,TextInput, TouchableOpacity,Alert} from 'react-native'
 import firebase from './firebase'
 import style from './styles'
-import {useBackButton, useNavigation} from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native'
+import DatePicker from 'react-native-datepicker';
 
 export default function UserDetails({route}){
     const  navigation = useNavigation()
@@ -16,7 +16,7 @@ export default function UserDetails({route}){
     }
 
     const[client,seClient] = useState(initialState)
-    const [loading,setLoading] = useState(true) //Defina se o indicador de carregamento é mostrado.
+    const [bornDate,setDate] = useState(new Date(Date.now()));
 
 const updateUser = async () => {
     if (client.name === "" || client.email === '' || client.password === '' || client.phone === "") {
@@ -32,9 +32,11 @@ const updateUser = async () => {
                      upRef.set({
                         name: client.name,
                         phone: client.phone,
+                        bornDate: date
                     });
                     seClient(initialState);
                     alert("Updated successfully ");
+                    navigation.goBack()
                 })
             })
         } catch (e) {
@@ -61,29 +63,44 @@ const deleteUser = async () => {
 
  const handleChangeText =(name,value) =>{
      seClient({...client,[name]:value})
-     if(loading){
-         return(
-             <View>
-                 <ActivityIndicator size = "large" color="#A9A9A9" />
-             </View>
-         )
-     }
+   
  }  
 
 return(
     <View>
+        <View style={style.container}>
         <Text>Welcome {route.params?.name}</Text>
+        <Text>Name</Text>
           <TextInput style= {style.input} placeholder={'Name'}  value ={client.name} onChangeText ={(value)=> handleChangeText('name',value)}></TextInput>
+          <Text>Phone</Text>
           <TextInput style = {style.input} placeholder={'Phone'} value={client.phone} onChangeText={(value)=>handleChangeText('phone',value)}></TextInput>
+          <Text>Email</Text>
           <TextInput style = {style.input} placeholder={'Email'} value={client.email} onChangeText={(value)=>handleChangeText('email',value)}></TextInput>
+          <Text>Password</Text>
           <TextInput style = {style.input} placeholder={'Password'} value={client.password} onChangeText={(value)=>handleChangeText('password',value)}></TextInput>
 
-                   <TouchableOpacity onPress={()=>updateUser()}>
+          <DatePicker
+            style={style.datePicker}
+             date={bornDate}
+             mode='date'
+             locale={'en'}
+             format='DD-MM-YYYY'
+             maxDate='31-12-2021'
+             confirmBtnText='Confirm'
+             cancelBtnText='Cancel'
+             onDateChange = {(date)=>{
+                 setDate(date)
+                 handleChangeText('date',date)
+             }}
+            />
+
+                   <TouchableOpacity  onPress={()=>updateUser()}>
                       <Text style ={style.buttonUpd}>UPDATE</Text>
                    </TouchableOpacity>
                    <TouchableOpacity onPress={()=>deleteUser()}>
                      <Text style ={style.buttonDel}>DELETE</Text>
                    </TouchableOpacity>
+        </View>
     </View>
 )
 }
