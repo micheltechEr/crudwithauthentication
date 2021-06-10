@@ -2,11 +2,9 @@ import React, {useState } from 'react'
 import {View,Text ,TextInput, TouchableOpacity,Alert} from 'react-native'
 import firebase from './firebase'
 import style from './styles'
-import {useNavigation} from '@react-navigation/native'
 import DatePicker from 'react-native-datepicker';
 
-export default function UserDetails({route}){
-    const  navigation = useNavigation()
+export default function UserDetails({route},{navigation}){
     const initialState = {
         id:'',
         name:'',
@@ -32,7 +30,7 @@ const updateUser = async () => {
                      upRef.set({
                         name: client.name,
                         phone: client.phone,
-                        bornDate: date
+                        bornDate: bornDate
                     });
                     seClient(initialState);
                     alert("Updated successfully ");
@@ -53,11 +51,11 @@ const deleteUser = async () => {
                     
         const removeLink = firebase.db.collection("clients").doc(route.params?.id);
          removeLink.delete();
-        alert("Removed");
+        Alert.alert("Removed");
         navigation.goBack()
         })
     } catch (e) {
-        alert("Removal error,try again");
+        Alert.alert("Removal error,try again");
     }
 };
 

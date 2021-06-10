@@ -5,13 +5,12 @@ import style from './styles'
 import { Modal } from 'react-native'
 import { Button } from 'react-native'
 import { SafeAreaView } from 'react-native'
-import {useNavigation} from '@react-navigation/native'
+import {useIsFocused, useNavigation} from '@react-navigation/native'
 import firebase from './firebase'
 import { validate } from 'validate.js';
 import constraints from './constraingt';
 
-export default function Home(){
-    const  navigation = useNavigation()
+export default function Home({navigation}){
     const [state,setState] = useState({
         id:'',
         name:'',
@@ -19,6 +18,7 @@ export default function Home(){
         password:'',
         visible:false,
     })
+
     const handleChangeText =(name,value) =>{
         setState({...state,[name]:value})
     }
@@ -37,9 +37,9 @@ export default function Home(){
                 .signInWithEmailAndPassword(state.email, state.password)
                 .then(async (data) => {
                     alert("Sucess");
-                    const uid = data.user.uid;
+                    const uid = data.user.uid; 
                     const doc = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().name;
-                    navigation.navigate("UserDetails", { id: uid, name: doc });
+                     navigation.navigate("UserDetails", { id: uid, name: doc });
                 })
                 .catch((error) => {
                     alert(error + " .Please provide correct credentials");
@@ -54,7 +54,7 @@ export default function Home(){
              <TouchableOpacity onPress={()=>setState(true)}>
                  <Text style={style.startButton}>START</Text>
              </TouchableOpacity>                 
-             <Modal animationType={'slide'} transparent={true}  visible={state.visible} >
+             <Modal animationType={'slide'} transparent={true} visible={state.visible} >
 
              <View  style={style.loginModal}>
                  <TextInput placeholder={'Email'} style={style.inputModal} autoCompleteType={'email'}  onChangeText ={ (value)=> handleChangeText('email',value)} ></TextInput>
