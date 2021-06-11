@@ -9,48 +9,45 @@ import firebase from './firebase'
 import { validate } from 'validate.js';
 import constraints from './constraingt';
 import { useIsFocused } from '@react-navigation/native';
+import { ClientContext } from './ClientContext'
 
 
 export default function Home({navigation}){
     const isFocused = useIsFocused();
-    const [state,setState] = useState({
+    const initialState={
         id:'',
         name:'',
         email :'',
         password:'',
         visible:false,
-    })
-
+    }
+    const[client,setClient] = useState(ClientContext)
 
     const handleChangeText =(name,value) =>{
-        setState({...state,[name]:value})
+        setClient({...client,[name]:value})
     }
     const createNewUser=()=>{
         navigation.navigate('CreateNewUser')
     }
 
-    const changeState = ()=>{
-        setState(true)
-        console.log(state.visible)
-    }
 
 
     const login = async () => {
-        if (state.email === "" || state.password === "") {
+        if (client.email === "" || client.password === "") {
             alert("Provide a value");
         } else {
-            const validationResult = validate(state.email, constraints);
-            setState({ errors: validationResult });
+            const validationResult = validate(client.email, constraints);
+            setClient({ errors: validationResult });
             firebase.firebase
                 .auth()
-                .signInWithEmailAndPassword(state.email, state.password)
+                .signInWithEmailAndPassword(client.email, client.password)
                 .then(async (data) => {
                     alert("Sucess");
                     const uid = data.user.uid; 
                     const doc = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().name;
                     const docPhone = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().phone;
                     const docBirthDay = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().bornDate;
-                     navigation.navigate("UserDetails", { id: uid, name: doc,phone:docPhone,bornDate:docBirthDay,email:state.email});
+                     navigation.navigate("UserDetails", { id: uid, name: doc,phone:docPhone,bornDate:docBirthDay,email:client.email});
                 })
                 .catch((error) => {
                     alert(error + " .Please provide correct credentials");
@@ -61,16 +58,12 @@ export default function Home({navigation}){
  
     return(
          <View style={style.loginBackground}>
-             <Text style={style.titleHome}>YARD SHOP </Text> 
-
-             <TouchableOpacity onPress={()=>changeState()}>
-                 <Text style={style.startButton}>START</Text>
-             </TouchableOpacity>                 
-             <Modal animationType={'slide'} transparent={true} visible={state.visible} >
+             <Text style={style.titleHome}>YARD SHOP </Text>                
+             <Modal animationType={'slide'} transparent={true} visible={client.visible} >
 
              <View  style={style.loginModal}>
                  <TextInput placeholder={'Email'} style={style.inputModal} autoCompleteType={'email'}  onChangeText ={ (value)=> handleChangeText('email',value)} ></TextInput>
-                 <TextInput placeholder={'Password'} style={style.inputModal} autoCompleteType={'password'}  onChangeText ={(value)=> handleChangeText('password',value)}></TextInput>
+                 <TextInput placeholder={'Password'} style={style.inputModal} autoCompleteType={'password'} secureTextEntry={true}  onChangeText ={(value)=> handleChangeText('password',value)}></TextInput>
                  <SafeAreaView style={style.loginButton}>
                  <Button  title={'LOGIN'} onPress={()=>login()} ></Button>
                  </SafeAreaView>

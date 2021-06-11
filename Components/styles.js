@@ -120,10 +120,11 @@ changeClients:{
     borderWidth:2,
     borderColor:'transparent',
     width:270,
+    height:420,
     marginTop:120,
     marginLeft:50,
     alignItems:'center',
-    paddingVertical:40,
+    paddingVertical:20,
     borderRadius:25
 },
 
@@ -136,6 +137,22 @@ buttonDel:{
     backgroundColor:'#FF0000',
     marginEnd:-120,
     marginTop:-40
+},
+
+showUserManager:{
+    textAlign:'center',
+    paddingTop:20,
+    backgroundColor:'#008B8B',
+    width:120,
+    marginTop:-300,
+    marginHorizontal:120,
+    color:'#FFF',
+    fontWeight:'700',
+    borderRadius:5,
+    height:60
+},
+list:{
+    backgroundColor:'#FFF'
 }
 
 })

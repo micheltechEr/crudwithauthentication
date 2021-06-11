@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {View,Text ,TextInput,SectionList,Alert} from 'react-native'
+import {View,Text ,TextInput,SectionList,TouchableOpacity} from 'react-native'
 import firebase from './firebase'
 import style from './styles'
 import { Modal } from 'react-native'
@@ -7,6 +7,7 @@ import DatePicker from 'react-native-datepicker';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-elements/dist/buttons/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { ClientContext } from './ClientContext'
 
 export default function UserDetails({route}){
     const navigation = useNavigation()
@@ -15,10 +16,11 @@ export default function UserDetails({route}){
         name:'',
         phone:'',
         email:'',
-        password:''
+        password:'',
+        
     }
-
-    const[client,seClient] = useState(initialState)
+    const [modal,setModal] = useState(true)
+    const[client,setClient] = useState(ClientContext)
     const [bornDate,setDate] = useState(new Date(Date.now()));
 
     const reload = ()=>{
@@ -33,7 +35,7 @@ export default function UserDetails({route}){
 
 const updateUser =  () => {
     if (client.name === "" || client.email === '' || client.password === '' || client.phone === "") {
-        Alert.alert("Please, provide a value");
+        alert("Please, provide a value");
     } else {
         try {
             const clientT = firebase.firebase.auth().currentUser;
@@ -47,7 +49,7 @@ const updateUser =  () => {
                         phone: client.phone,
                         bornDate: bornDate
                     });
-                    seClient(initialState);
+                    setClient(initialState);
                     alert("Updated successfully ");
                 })
             })
@@ -72,35 +74,47 @@ const deleteUser =  () => {
 };
 
  const handleChangeText =(name,value) =>{
-     seClient({...client,[name]:value})
-   
+     setClient({...client,[name]:value})
  }  
- const clientDatas = [
+
+ 
+ const DATA = [
     {
-        title:'User Information',
-        data:[route.params?.name]
+      title: "User Information",
+      data: [route.params?.name,route.params?.bornDate]
     },
     {
-        title:'User Contact',
-        data:[route.params?.phone,route.params?.email]
-    }
-];
-const User = ({ title }) => (
+      title: "Contact",
+      data: [route.params?.email,route.params?.phone]
+    },
+  ];
+  
+  const User = ({ title }) => (
     <View >
-      <Text>{title}</Text>
+      <Text >{title}</Text>
     </View>
   );
+
+  const changeState = ()=>{
+      setModal(!modal)
+      console.log(modal)
+}
 return(
-    <View style={style.container}>
-        <SectionList  
-         sections={clientDatas}  
-         renderItem={({ user }) => <User title={user} /> }
-          keyExtractor={(user, index) => user + index}
-         renderSectionHeader={({ section: { title } }) => (
-        <Text>{title}</Text>
-             )} 
-      />
-        <Modal animationType={'slide'}  transparent={true}  visible={true} >
+    <View>
+      <SafeAreaView style={style.list}>
+      <SectionList
+      sections={DATA}
+      renderItem={({ item }) => <User title={item} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <Text >{title}</Text>
+      )}
+    />
+      </SafeAreaView>
+   
+
+      <Button title={' OK'} onPress={()=>changeState}/>
+
+        <Modal animationType={'slide'} transparent={true} visible={modal} >
         <View style={style.changeClients}>
         <Text>Name</Text>
           <TextInput style= {style.input} placeholder={'Name'}  value ={client.name} onChangeText ={(value)=> handleChangeText('name',value)}></TextInput>
