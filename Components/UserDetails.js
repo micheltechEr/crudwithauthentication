@@ -52,9 +52,9 @@ const updateUser =  () => {
                      upRef.set({
                         name: client.name,
                         phone: client.phone,
-                        bornDate: bornDate
+                        date: bornDate
                     });
-                    setClient(initialState);
+                    setClient(ClientContext);
                     alert("Updated successfully ");
                 })
             })
@@ -95,7 +95,7 @@ const signOut = () =>{
  const DATA = [
     {
       title: "User Information",
-      data: ['Name : '+route.params?.name,'Born Date : '+route.params?.bornDate,'Password : '+route.params?.password]
+      data: ['Name : '+route.params?.name,'Born Date : '+route.params?.date,'Password : '+route.params?.password]
     },
     {
       title: "Contact",

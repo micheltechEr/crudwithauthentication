@@ -50,7 +50,7 @@ export default function Home({navigation}){
                         const docPhone = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().phone;
                         const docBirthDay = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().date;
 
-                         navigation.navigate("UserDetails", { id: uid, name: doc,phone:docPhone,bornDate:docBirthDay,email:client.email,password:client.password});
+                         navigation.navigate("UserDetails", { id: uid, name: doc,phone:docPhone,date:docBirthDay,email:client.email,password:client.password});
                     })
                     .catch((error) => {
                         alert(error + " .Please provide correct credentials");
