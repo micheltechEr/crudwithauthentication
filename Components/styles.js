@@ -26,14 +26,6 @@ cancelButton:{
     marginTop:-37
 },
 
-carWashMan:{
-    height:95,
-    width:115,
-    marginLeft:20,
-    marginVertical:-55,
-    marginBottom:10,
-},
-
 loginModal:{
     backgroundColor:'#226C9E',
     borderWidth:2,
@@ -54,7 +46,6 @@ inputModal:{
     borderColor:'#FFFF',
     marginBottom:10,
     borderWidth:0.35,
-
 },
 
 loginButton:{
@@ -106,9 +97,25 @@ closeModal:{
     textAlign:'center'
 },
 datePicker:{
-    marginTop:15,
+    marginTop:2,
     marginBottom: 25
 },
+
+createClientModal:{
+    backgroundColor:'#008B8B',
+    flex:1
+},
+createClientDatas:{
+    backgroundColor:'#F5F5DC',
+    borderWidth:2,
+    borderColor:'transparent',
+    width:270,
+    marginTop:70,
+    marginLeft:50,
+    alignItems:'center',
+    paddingVertical:40,
+    borderRadius:25
+}
 
 })
 export default style

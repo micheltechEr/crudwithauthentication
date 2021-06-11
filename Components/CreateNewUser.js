@@ -6,6 +6,7 @@ import { validate } from 'validate.js';
 import constraints from './constraingt';
 import DatePicker from 'react-native-datepicker';
 
+
 export default function CreateNewUser({navigation}){
     const [state,setState] = useState({ 
         name :"",
@@ -20,6 +21,16 @@ export default function CreateNewUser({navigation}){
         setState({...state,[name]:value})
     }
 
+    const goBack = ()=>{
+        navigation.goBack()
+    }
+    const reload = ()=>{
+        navigation.reset({
+            index:0,
+            routes: [{ name: "Home" }],
+        })
+    }
+  
     const saveNewUser = async () => {
         try {
             if (state.name === "" || state.email === "" || state.password === "" || state.phone === "") {
@@ -54,43 +65,38 @@ export default function CreateNewUser({navigation}){
     };
     
     return(
-        <View>
-          <View style={style.container} >
-              <Modal animationType={'fade'} transparent={true} visible={state.visible}>
-              <Text>Name</Text>
-            <TextInput style={style.input}  placeholder={'Name'}  onChangeText ={(value)=> handleChangeText('name',value)} ></TextInput>
-            <Text>Email</Text>
-            <TextInput   style={style.input} placeholder={'Email'} autoCompleteType={'email'} onChangeText ={(value)=> handleChangeText('email',value)}></TextInput>
-            <Text>Password</Text>
-            <TextInput   style={style.input}  placeholder={'Passowrd'} autoCompleteType={'password'} secureTextEntry={true} onChangeText ={(value)=> handleChangeText('password',value)}></TextInput>
-            <Text>Phone</Text>
-            <TextInput  style={style.input} placeholder={'Phone'} autoCompleteType={'tel'} onChangeText ={(value)=> handleChangeText('phone',value)}></TextInput>
-            <Text>Date</Text>
-            <DatePicker
-            style={style.datePicker}
-             date={date}
-             mode='date'
-             locale={'en'}
-             format='DD-MM-YYYY'
-             maxDate='31-12-2021'
-             confirmBtnText='Confirm'
-             cancelBtnText='Cancel'
-             onDateChange = {(date)=>{
-                 setDate(date)
-                 handleChangeText('date',date)
+            <View style = {style.createClientModal}>
+              <Modal animationType={'fade'} transparent={true}   visible={state.visible}>
+                <View style={style.createClientDatas}>
+                  <Text>Name</Text>
+                     <TextInput style={style.inputModal}  placeholder={'Name'}  onChangeText ={(value)=> handleChangeText('name',value)} ></TextInput>
+                 <Text>Email</Text>
+                     <TextInput   style={style.inputModal} placeholder={'Email'} autoCompleteType={'email'} onChangeText ={(value)=> handleChangeText('email',value)}></TextInput>
+                <Text>Password</Text>
+                    <TextInput   style={style.inputModal}  placeholder={'Password'} autoCompleteType={'password'} secureTextEntry={true} onChangeText ={(value)=> handleChangeText('password',value)}></TextInput>
+                <Text>Phone</Text>
+                   <TextInput  style={style.inputModal} placeholder={'Phone'} autoCompleteType={'tel'} onChangeText ={(value)=> handleChangeText('phone',value)}></TextInput>
+                <Text>Date</Text>
+                   <DatePicker
+                   style={style.datePicker}
+                   date={date}
+                   mode='date'
+                   format='DD-MM-YYYY'
+                   maxDate='31-12-2021'
+                   onDateChange = {(date)=>{
+                   setDate(date)
+                  handleChangeText('date',date)
              }}
             />
             <SafeAreaView  style={style.buttonSave} > 
-            <Button color='#E21212' onPress={saveNewUser} title={'SAVE'}> </Button>
+            <Button color='#32CD32' onPress={saveNewUser} title={'SAVE'}> </Button>
             </SafeAreaView>
             
             <SafeAreaView  style={style.cancelButton} > 
-            <Button color='#CDCBCB' onPress={()=>{navigation.goBack()}}  title={'CANCEL'}> </Button>
+            <Button color='#CDCBCB' onPress={()=>{goBack(),reload()}}  title={'CANCEL'}> </Button>
             </SafeAreaView>
-              </Modal>
-         </View>
-         <View>
-         </View>
-        </View>     
+                  </View>
+              </Modal>       
+                  </View>
     )
 }

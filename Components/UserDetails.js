@@ -1,10 +1,12 @@
-import React, {useState } from 'react'
+import React,{useState} from 'react'
 import {View,Text ,TextInput, TouchableOpacity,Alert} from 'react-native'
 import firebase from './firebase'
 import style from './styles'
 import DatePicker from 'react-native-datepicker';
+import { useNavigation } from '@react-navigation/native';
 
-export default function UserDetails({route},{navigation}){
+export default function UserDetails({route}){
+    const navigation = useNavigation()
     const initialState = {
         id:'',
         name:'',
@@ -16,9 +18,19 @@ export default function UserDetails({route},{navigation}){
     const[client,seClient] = useState(initialState)
     const [bornDate,setDate] = useState(new Date(Date.now()));
 
-const updateUser = async () => {
+    const reload = ()=>{
+        navigation.reset({
+            index:0,
+            routes: [{ name: "Home" }],
+        })
+    }
+    const goBack = ()=>{
+        navigation.goBack()
+    }
+
+const updateUser =  () => {
     if (client.name === "" || client.email === '' || client.password === '' || client.phone === "") {
-        alert("Please, provide a value");
+        Alert.alert("Please, provide a value");
     } else {
         try {
             const clientT = firebase.firebase.auth().currentUser;
@@ -34,7 +46,6 @@ const updateUser = async () => {
                     });
                     seClient(initialState);
                     alert("Updated successfully ");
-                    navigation.goBack()
                 })
             })
         } catch (e) {
@@ -44,18 +55,16 @@ const updateUser = async () => {
     }
 };
 
-const deleteUser = async () => {
+const deleteUser =  () => {
     try {
         const client = firebase.firebase.auth().currentUser
         client.delete().then(function(){
-                    
         const removeLink = firebase.db.collection("clients").doc(route.params?.id);
          removeLink.delete();
-        Alert.alert("Removed");
-        navigation.goBack()
+        alert("Removed sucessfully");
         })
     } catch (e) {
-        Alert.alert("Removal error,try again");
+        alert("Removal error,try again");
     }
 };
 
@@ -92,10 +101,10 @@ return(
              }}
             />
 
-                   <TouchableOpacity  onPress={()=>updateUser()}>
+                   <TouchableOpacity  onPress={()=>{updateUser(),goBack(),reload()}}>
                       <Text style ={style.buttonUpd}>UPDATE</Text>
                    </TouchableOpacity>
-                   <TouchableOpacity onPress={()=>deleteUser()}>
+                   <TouchableOpacity onPress={()=>{deleteUser(),goBack(),reload()}}>
                      <Text style ={style.buttonDel}>DELETE</Text>
                    </TouchableOpacity>
         </View>
