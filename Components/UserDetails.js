@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import {View,Text ,TextInput,SectionList,TouchableOpacity} from 'react-native'
+import {View,Text ,TextInput,SectionList,TouchableOpacity,LogBox} from 'react-native'
 import firebase from './firebase'
 import style from './styles'
 import { Modal } from 'react-native'
@@ -8,20 +8,21 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-elements/dist/buttons/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ClientContext } from './ClientContext'
+import { Image } from 'react-native-elements'
 
 export default function UserDetails({route}){
+    LogBox.ignoreAllLogs()
     const navigation = useNavigation()
     const initialState = {
         id:'',
         name:'',
         phone:'',
         email:'',
-        password:'',
-        
+        password:'',        
     }
-    const [modal,setModal] = useState(true)
     const[client,setClient] = useState(ClientContext)
-    const [bornDate,setDate] = useState(new Date(Date.now()));
+    const[visible,setVisible] = useState(ClientContext)
+     const [bornDate,setDate] = useState(new Date(Date.now()));
 
     const reload = ()=>{
         navigation.reset({
@@ -32,6 +33,10 @@ export default function UserDetails({route}){
     const goBack = ()=>{
         navigation.goBack()
     }
+
+    const changeState = ()=>{
+        setVisible(true)
+  }
 
 const updateUser =  () => {
     if (client.name === "" || client.email === '' || client.password === '' || client.phone === "") {
@@ -73,6 +78,15 @@ const deleteUser =  () => {
     }
 };
 
+const signOut = () =>{
+    firebase.firebase.auth().signOut().then(function(){
+        alert('See you later ')
+    })
+    .catch((error)=>{
+        alert(error)
+    })
+}
+
  const handleChangeText =(name,value) =>{
      setClient({...client,[name]:value})
  }  
@@ -81,49 +95,53 @@ const deleteUser =  () => {
  const DATA = [
     {
       title: "User Information",
-      data: [route.params?.name,route.params?.bornDate]
+      data: ['Name : '+route.params?.name,'Born Date : '+route.params?.bornDate,'Password : '+route.params?.password]
     },
     {
       title: "Contact",
-      data: [route.params?.email,route.params?.phone]
+      data: ['Email : '+route.params?.email,'Phone : '+route.params?.phone]
     },
+    {
+        title:"Follow the guidelines",
+        data:["Click on the button to change or delete your data"]
+    }
   ];
   
   const User = ({ title }) => (
     <View >
-      <Text >{title}</Text>
+      <Text style={style.userList}>{title}</Text>
     </View>
   );
 
-  const changeState = ()=>{
-      setModal(!modal)
-      console.log(modal)
-}
 return(
-    <View>
-      <SafeAreaView style={style.list}>
+    <View style={style.detailScreen}>
+        <Image onPress={()=>{signOut(),goBack(),reload()}} style={style.logoutIcon} source={require('./logout.png')}/> 
+
+      <SafeAreaView  style={style.list}>
       <SectionList
       sections={DATA}
-      renderItem={({ item }) => <User title={item} />}
+      renderItem={({ item }) => <User  title={item} />}
+      keyExtractor={item=>item.id}
       renderSectionHeader={({ section: { title } }) => (
-        <Text >{title}</Text>
+        <Text style={style.headerList}>{title}</Text>
       )}
     />
       </SafeAreaView>
-   
 
-      <Button title={' OK'} onPress={()=>changeState}/>
+      <TouchableOpacity onPress={()=>{changeState()}}>
+          <Text style={style.showUserManager}>CLICK HERE</Text>
+      </TouchableOpacity>
 
-        <Modal animationType={'slide'} transparent={true} visible={modal} >
+        <Modal animationType={'slide'} transparent={true} visible={visible} >
         <View style={style.changeClients}>
         <Text>Name</Text>
-          <TextInput style= {style.input} placeholder={'Name'}  value ={client.name} onChangeText ={(value)=> handleChangeText('name',value)}></TextInput>
+          <TextInput style= {style.input} placeholder={'Name'}  value ={client.name} autoCompleteType={'name'} onChangeText ={(value)=> handleChangeText('name',value)}></TextInput>
           <Text>Phone</Text>
-          <TextInput style = {style.input} placeholder={'Phone'} value={client.phone} onChangeText={(value)=>handleChangeText('phone',value)}></TextInput>
+          <TextInput style = {style.input} placeholder={'Phone'} value={client.phone} autoCompleteType={'tel'} onChangeText={(value)=>handleChangeText('phone',value)}></TextInput>
           <Text>Email</Text>
-          <TextInput style = {style.input} placeholder={'Email'} value={client.email} onChangeText={(value)=>handleChangeText('email',value)}></TextInput>
+          <TextInput style = {style.input} placeholder={'Email'} value={client.email} autoCompleteType={'email'} onChangeText={(value)=>handleChangeText('email',value)}></TextInput>
           <Text>Password</Text>
-          <TextInput style = {style.input} placeholder={'Password'} value={client.password} onChangeText={(value)=>handleChangeText('password',value)}></TextInput>
+          <TextInput style = {style.input} placeholder={'Password'} value={client.password} autoCompleteType={'password'} secureTextEntry={true} onChangeText={(value)=>handleChangeText('password',value)}></TextInput>
 
           <DatePicker
             style={style.datePicker}

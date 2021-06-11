@@ -8,6 +8,7 @@ const ClientProvider=(props)=>{
         email :"",
         password:"",
         phone:"",
+        visible:false,
         handleChangeText: (property, value) => {
             setClient({...client,[property]: value});
           }

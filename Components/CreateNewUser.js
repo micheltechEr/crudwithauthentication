@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import firebase from './firebase'
-import {View,Text, TextInput, Modal, Button, SafeAreaView, Alert} from 'react-native'
+import {View,Text, TextInput, Modal, Button, SafeAreaView, Alert,LogBox} from 'react-native'
 import style from './styles'
 import { validate } from 'validate.js';
 import constraints from './constraingt';
@@ -8,6 +8,7 @@ import DatePicker from 'react-native-datepicker';
 
 
 export default function CreateNewUser({navigation}){
+    LogBox.ignoreAllLogs()
     const [state,setState] = useState({ 
         name :"",
         email :"",
@@ -56,20 +57,19 @@ export default function CreateNewUser({navigation}){
                         })
                     })
                    
-                Alert.alert("Saved");
-                navigation.goBack();
+                 alert("Saved");
             }
         } catch (e) {
-           Alert.alert("Insertion error,try again"+e);
+           alert(e);
         }
     };
     
     return(
             <View style = {style.createClientModal}>
-              <Modal animationType={'fade'} transparent={true}   visible={state.visible}>
+              <Modal animationType={'fade'} transparent={true}  visible={state.visible}>
                 <View style={style.createClientDatas}>
                   <Text>Name</Text>
-                     <TextInput style={style.inputModal}  placeholder={'Name'}  onChangeText ={(value)=> handleChangeText('name',value)} ></TextInput>
+                     <TextInput style={style.inputModal}  placeholder={'Name'}  autoCompleteType={'name'} onChangeText ={(value)=> handleChangeText('name',value)} ></TextInput>
                  <Text>Email</Text>
                      <TextInput   style={style.inputModal} placeholder={'Email'} autoCompleteType={'email'} onChangeText ={(value)=> handleChangeText('email',value)}></TextInput>
                 <Text>Password</Text>
@@ -89,11 +89,11 @@ export default function CreateNewUser({navigation}){
              }}
             />
             <SafeAreaView  style={style.buttonSave} > 
-            <Button color='#32CD32' onPress={saveNewUser} title={'SAVE'}> </Button>
+            <Button color='#32CD32' onPress={()=>{saveNewUser(),goBack(),reload()}} title={'SAVE'}> </Button>
             </SafeAreaView>
             
             <SafeAreaView  style={style.cancelButton} > 
-            <Button color='#CDCBCB' onPress={()=>{goBack(),reload()}}  title={'CANCEL'}> </Button>
+            <Button color='#CDCBCB'  onPress={()=>{goBack(),reload()}}  title={'CANCEL'}> </Button>
             </SafeAreaView>
                   </View>
               </Modal>       

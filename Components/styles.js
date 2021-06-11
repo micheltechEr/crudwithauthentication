@@ -62,13 +62,6 @@ signInStyle:{
     color:'#FFFF',
 },
 
-titleHome:{
-    color:'#FFFF',
-    fontSize:30,
-    marginHorizontal:110,
-    marginVertical:40,
-    width:200
-},
 
 startButton:{
     backgroundColor:'#A4C8B2',
@@ -78,7 +71,7 @@ startButton:{
     paddingTop:10,
     borderRadius:20,
     marginHorizontal:105,
-    marginVertical:80,
+    marginVertical:220,
     color:'#FFFF',
     fontSize:15
 },
@@ -144,7 +137,8 @@ showUserManager:{
     paddingTop:20,
     backgroundColor:'#008B8B',
     width:120,
-    marginTop:-300,
+    marginTop:60,
+    marginBottom:20,
     marginHorizontal:120,
     color:'#FFF',
     fontWeight:'700',
@@ -152,8 +146,38 @@ showUserManager:{
     height:60
 },
 list:{
-    backgroundColor:'#FFF'
-}
+    backgroundColor:'#D8BFD8',
+    marginLeft:30,
+    borderRadius:10,
+    marginTop:40,
+    height:310,
+    width:300
+},
 
+userList:{
+    textAlign:'center',
+    fontSize:13
+},
+
+headerList:{
+    fontWeight:'700',
+    borderColor:'#B483B4',
+    borderWidth:2,
+    textAlign:'center',
+    marginBottom:10,
+    marginTop:6,
+    fontSize:22
+},
+
+detailScreen:{
+    flex:1,
+    backgroundColor:'#BFD8D8'
+},
+logoutIcon:{
+    width:25,
+    height:25,
+    marginHorizontal:320,
+    marginTop:5
+}
 })
 export default style
