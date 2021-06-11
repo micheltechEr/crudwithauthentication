@@ -1,5 +1,5 @@
-import React, { useState,useEffect} from 'react'
-import {View,Text, TouchableOpacity, } from 'react-native'
+import React, { useState} from 'react'
+import {View,Text, TouchableOpacity,  } from 'react-native'
 import { TextInput } from 'react-native'
 import style from './styles'
 import { Modal } from 'react-native'
@@ -48,7 +48,9 @@ export default function Home({navigation}){
                     alert("Sucess");
                     const uid = data.user.uid; 
                     const doc = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().name;
-                     navigation.navigate("UserDetails", { id: uid, name: doc });
+                    const docPhone = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().phone;
+                    const docBirthDay = await (await firebase.firebase.firestore().doc(`clients/${uid}`).get()).data().bornDate;
+                     navigation.navigate("UserDetails", { id: uid, name: doc,phone:docPhone,bornDate:docBirthDay,email:state.email});
                 })
                 .catch((error) => {
                     alert(error + " .Please provide correct credentials");
@@ -56,6 +58,7 @@ export default function Home({navigation}){
         }
     };
 
+ 
     return(
          <View style={style.loginBackground}>
              <Text style={style.titleHome}>YARD SHOP </Text> 

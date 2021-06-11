@@ -1,9 +1,8 @@
 import { StyleSheet } from 'react-native'; 
 const style = StyleSheet.create({
    container:{
-       width:'100%',
-       alignItems:'center',
-       paddingTop:60
+    backgroundColor:'#E0FFFF',
+    flex:1,
    },
    input:{
        borderBottomColor:'gray',
@@ -18,7 +17,6 @@ const style = StyleSheet.create({
 buttonSave:{
     width:90,
     marginStart:120,
-
 },
 cancelButton:{
     width:90,
@@ -115,6 +113,29 @@ createClientDatas:{
     alignItems:'center',
     paddingVertical:40,
     borderRadius:25
+},
+
+changeClients:{
+    backgroundColor:'#DCDCDC',
+    borderWidth:2,
+    borderColor:'transparent',
+    width:270,
+    marginTop:120,
+    marginLeft:50,
+    alignItems:'center',
+    paddingVertical:40,
+    borderRadius:25
+},
+
+buttonUpd:{
+    backgroundColor:'#FF8C00',
+    marginStart:-120
+},
+
+buttonDel:{
+    backgroundColor:'#FF0000',
+    marginEnd:-120,
+    marginTop:-40
 }
 
 })
