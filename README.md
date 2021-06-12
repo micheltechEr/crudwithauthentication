@@ -9,7 +9,7 @@ Nome: Ângelo Miguel Ribeiro Cerqueira Lima - Usuário
 Para inicializar, pode-se utilizar o <blockquote> npm start </blockquote>
 
 #Telas
-Link do funcionamento da aplicação: https://drive.google.com/file/d/1MsLhU9gVyXM7XCEckMB4lHYavkp__nT8/view?usp=sharing
+Link do funcionamento da aplicação: https://drive.google.com/file/d/1UvAj59CyQaeRRpTI44222uZ5V_AgqgtJ/view?usp=sharing
 
 Todas as telas foram feitas por um integrante
 
